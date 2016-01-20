@@ -8,6 +8,7 @@ public class PlayerControl : MonoBehaviour {
     public Sprite WalkLeftS;
     public Sprite WalkRightS;
     public Sprite Still;
+    bool Brake;
 
 	// Use this for initialization
 	void Start () {
@@ -40,11 +41,6 @@ public class PlayerControl : MonoBehaviour {
 
             transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, 0);
         }
-        if (Input.GetKeyDown("s"))
-        {
-            gameObject.GetComponent<SpriteRenderer>().sprite = Still;
-            transform.position = new Vector3(transform.position.x, transform.position.y - 0.5f, 0);
-        }
             
         if (Input.GetKeyDown("a"))
         {
@@ -63,8 +59,8 @@ public class PlayerControl : MonoBehaviour {
         BeforePos = transform.position.y;
 	}
 
-    void OnCollisionEnter2D(Collision2D coll)
+    void OnCollisionEnter2D()
     {
-        Destroy(gameObject);
+        gameObject.GetComponent<SpriteRenderer>().sprite = null;
     }
 }
