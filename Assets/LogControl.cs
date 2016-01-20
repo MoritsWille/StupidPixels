@@ -16,14 +16,7 @@ public class LogControl : MonoBehaviour {
 	void Update () {
 	if (Player.position.y - 15 > transform.position.y)
     {
-        transform.position = new Vector3(transform.position.x, transform.position.y + Random.Range(75, 150),0);
-        if (Log1.position.y + 5 < transform.position.y || Log1.position.y - 5 > transform.position.y)
-        {
-            if (Log2.position.y + 5 < transform.position.y || Log2.position.y - 5 > transform.position.y)
-            {
-            transform.position = new Vector3(transform.position.x, transform.position.y + Random.Range(30, 100), 0);
-            }
-        }
+        NewPos();
     }
 	}
 
@@ -31,5 +24,17 @@ public class LogControl : MonoBehaviour {
     {
         transform.position = new Vector3(transform.position.x, transform.position.y + 10, 0);
         gameObject.GetComponent<SpriteRenderer>().sprite = Fall;
+    }
+
+    void NewPos()
+    {
+        transform.position = new Vector3(transform.position.x, transform.position.y + Random.Range(75, 150), 0);
+        if (Log1.position.y < transform.position.y + 30 || Log1.position.y > transform.position.y - 30)
+        {
+            if (Log2.position.y < transform.position.y + 30 || Log2.position.y > transform.position.y - 30)
+            {
+                transform.position = new Vector3(transform.position.x, transform.position.y + Random.Range(75, 150), 0);
+            }
+        }
     }
 }
