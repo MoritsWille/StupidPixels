@@ -14,7 +14,7 @@ public class LogControl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	if (Player.position.y - 15 > transform.position.y)
+	if (Player.position.y - 17 > transform.position.y)
     {
         NewPos();
     }
@@ -33,7 +33,7 @@ public class LogControl : MonoBehaviour {
         {
             if (Log2.position.y < transform.position.y + 30 || Log2.position.y > transform.position.y - 30)
             {
-                transform.position = new Vector3(transform.position.x, transform.position.y + Random.Range(75, 150), 0);
+                transform.position = new Vector3(transform.position.x, transform.position.y + Random.Range(60, 125), 0);
             }
         }
     }

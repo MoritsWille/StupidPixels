@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
+using System;
 
 public class PlayerControl : MonoBehaviour {
     float SpeedperTick = 0;
@@ -9,14 +11,17 @@ public class PlayerControl : MonoBehaviour {
     public Sprite WalkRightS;
     public Sprite Still;
     bool Dead = false;
+    Text ScoreText;
+    public GameObject Text;
 
 	// Use this for initialization
 	void Start () {
-	
+        ScoreText = Text.GetComponent<Text>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        ScoreText.text = "Score: " + Convert.ToInt32(Math.Ceiling(transform.position.y)).ToString();
         if (Dead)
         {
 
