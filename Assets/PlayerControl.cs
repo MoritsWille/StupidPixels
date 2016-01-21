@@ -75,4 +75,32 @@ public class PlayerControl : MonoBehaviour {
     {
 
     }
+
+    public void Forward()
+    {
+        if (WalkRight == true)
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = WalkLeftS;
+            WalkRight = false;
+        }
+        else
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = WalkRightS;
+            WalkRight = true;
+        }
+
+        transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, 0);
+    }
+
+    public void Left()
+    {
+        if (transform.position.x == 0 || transform.position.x == 12.5f)
+            transform.position = new Vector3(transform.position.x - 12.5f, transform.position.y, 0);
+    }
+
+    public void Right()
+    {
+        if (transform.position.x == 0 || transform.position.x == -12.5f)
+            transform.position = new Vector3(transform.position.x + 12.5f, transform.position.y, 0);
+    }
 }
