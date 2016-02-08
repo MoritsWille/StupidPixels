@@ -9,7 +9,7 @@ public class LogControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+        NewPos();
 	}
 	
 	// Update is called once per frame
@@ -22,18 +22,25 @@ public class LogControl : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D coll)
     {
+        StartCoroutine(Death());
+    }
+
+    IEnumerator Death()
+    {
         transform.position = new Vector3(transform.position.x, transform.position.y + 10, 0);
         gameObject.GetComponent<SpriteRenderer>().sprite = Fall;
+        yield return new WaitForSeconds(5);
+        Application.LoadLevel("GameOver");
     }
 
     void NewPos()
     {
-        transform.position = new Vector3(transform.position.x, transform.position.y + Random.Range(75, 150), 0);
+        transform.position = new Vector3(transform.position.x, transform.position.y + Random.Range(50, 200), 0);
         if (Log1.position.y < transform.position.y + 30 || Log1.position.y > transform.position.y - 30)
         {
             if (Log2.position.y < transform.position.y + 30 || Log2.position.y > transform.position.y - 30)
             {
-                transform.position = new Vector3(transform.position.x, transform.position.y + Random.Range(60, 125), 0);
+                transform.position = new Vector3(transform.position.x, transform.position.y + 80,0);
             }
         }
     }

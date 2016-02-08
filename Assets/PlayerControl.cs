@@ -2,9 +2,11 @@
 using System.Collections;
 using UnityEngine.UI;
 using System;
+using System.IO;
 
 public class PlayerControl : MonoBehaviour {
     float SpeedperTick = 0;
+    float HighestSPT = 0;
     float BeforePos = 0;
     bool WalkRight = true;
     public Sprite WalkLeftS;
@@ -13,20 +15,28 @@ public class PlayerControl : MonoBehaviour {
     bool Dead = false;
     Text ScoreText;
     public GameObject Text;
+    string ScorePath;
+    string HighScorePath;
 
 	// Use this for initialization
 	void Start () {
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            ScorePath = Application.persistentDataPath + @"Score.txt";
+            HighScorePath = Application.persistentDataPath + @"HighScore.txt";
+        }
+        else
+        {
+            ScorePath = Directory.GetCurrentDirectory() + @"\Score.txt";
+            HighScorePath = Directory.GetCurrentDirectory() + @"\HighScore.txt";
+        }
         ScoreText = Text.GetComponent<Text>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        ScoreText.text = "Score: " + Convert.ToInt32(Math.Ceiling(transform.position.y)).ToString();
-        if (Dead)
-        {
-
-        }
-        else
+        ScoreText.text = "Score: " + Convert.ToInt16(Math.Round(transform.position.y)).ToString();
+        if (Dead == false)
         {
             if (SpeedperTick > 0.001f)
             {
@@ -49,7 +59,7 @@ public class PlayerControl : MonoBehaviour {
                     WalkRight = true;
                 }
 
-                transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, 0);
+                transform.position = new Vector3(transform.position.x, transform.position.y + 1, 0);
             }
 
             if (Input.GetKeyDown("a"))
@@ -67,6 +77,11 @@ public class PlayerControl : MonoBehaviour {
             SpeedperTick = transform.position.y - BeforePos;
 
             BeforePos = transform.position.y;
+
+            if (SpeedperTick > HighestSPT)
+            {
+                HighestSPT = SpeedperTick;
+            }
         }
 	}
 
@@ -74,6 +89,11 @@ public class PlayerControl : MonoBehaviour {
     {
         gameObject.GetComponent<SpriteRenderer>().sprite = null;
         Dead = true;
+        File.WriteAllText(ScorePath, Convert.ToInt32(Math.Round(transform.position.y)).ToString());
+        if (Convert.ToInt32(File.ReadAllText(HighScorePath)) < Convert.ToInt32(File.ReadAllText(ScorePath)) || new FileInfo(HighScorePath).Length == 0)
+        {
+            File.WriteAllText(HighScorePath, File.ReadAllText(ScorePath));
+        }
     }
 
     void DeadText ()

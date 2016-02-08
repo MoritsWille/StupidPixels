@@ -9,37 +9,40 @@ public class MenuControl : MonoBehaviour {
     public int HighScore;
     string ScorePath;
     string HighScorePath;
-    string OrangeBoxPath;
-    string GreenBoxPath;
 
     // Use this for initialization
     void Start() {
-        //if (Application.platform == RuntimePlatform.Android)
-        //{
-        //    ScorePath = Application.persistentDataPath + @"Score.txt";
-        //    HighScorePath = Application.persistentDataPath + @"HighScore.txt";
-        //    OrangeBoxPath = Application.persistentDataPath + @"OrangeBox.txt";
-        //    GreenBoxPath = Application.persistentDataPath + @"GreenBox.txt";
-        //}
-        //else
-        //{
-        //    ScorePath = Directory.GetCurrentDirectory() + @"\Score.txt";
-        //    HighScorePath = Directory.GetCurrentDirectory() + @"\HighScore.txt";
-        //    OrangeBoxPath = Directory.GetCurrentDirectory() + @"\OrangeBox.txt";
-        //    GreenBoxPath = Directory.GetCurrentDirectory() + @"\GreenBox.txt";
-        //}
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            ScorePath = Application.persistentDataPath + @"Score.txt";
+            HighScorePath = Application.persistentDataPath + @"HighScore.txt";
+        }
+        else
+        {
+            ScorePath = Directory.GetCurrentDirectory() + @"\Score.txt";
+            HighScorePath = Directory.GetCurrentDirectory() + @"\HighScore.txt";
+        }
 
-        //if (!File.Exists(ScorePath)) File.Create(ScorePath);
-        //if (!File.Exists(HighScorePath)) File.Create(HighScorePath);
+        if (!File.Exists(ScorePath))
+        {
+            File.Create(ScorePath);
+        }
+
+        if (!File.Exists(HighScorePath))
+        {
+            File.Create(HighScorePath);
+            File.WriteAllText(HighScorePath, "0");
+        }
         //if (!File.Exists(OrangeBoxPath)) File.Create(OrangeBoxPath);
         //if (!File.Exists(GreenBoxPath)) File.Create(GreenBoxPath);
 
-        //Score = Convert.ToInt16(File.ReadAllText(ScorePath));
-        //HighScore = Convert.ToInt16(File.ReadAllText(HighScorePath));
+        Score = Convert.ToInt16(File.ReadAllText(ScorePath));
+        HighScore = Convert.ToInt16(File.ReadAllText(HighScorePath));
 
         //PlayGamesPlatform.Activate();
 
-        //Social.localUser.Authenticate((bool success) => {
+        //Social.localUser.Authenticate((bool success) =>
+        //{
         //    // handle success or failure
         //});
 
