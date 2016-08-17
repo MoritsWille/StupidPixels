@@ -17,9 +17,11 @@ public class PlayerControl : MonoBehaviour {
     public GameObject Text;
     string ScorePath;
     string HighScorePath;
-    public float minSwipeDistY;
-    public float minSwipeDistX;
-    private Vector2 startPos;
+    private float fingerStartTime = 0.0f;
+    private Vector2 fingerStartPos = Vector2.zero;
+    private bool isSwipe = false;
+    private float minSwipeDist = 50.0f;
+    private float maxSwipeTime = 0.5f;
 
 	// Use this for initialization
 	void Start () {
@@ -87,61 +89,78 @@ public class PlayerControl : MonoBehaviour {
             }
         }
 
+
         if (Input.touchCount > 0)
         {
 
-            Touch touch = Input.touches[0];
-
-
-
-            switch (touch.phase)
+            foreach (Touch touch in Input.touches)
             {
+                switch (touch.phase)
+                {
+                    case TouchPhase.Began:
+                        /* this is a new touch */
+                        isSwipe = true;
+                        fingerStartTime = Time.time;
+                        fingerStartPos = touch.position;
+                        break;
 
-                case TouchPhase.Began:
+                    case TouchPhase.Canceled:
+                        /* The touch is being canceled */
+                        isSwipe = false;
+                        break;
 
-                    startPos = touch.position;
+                    case TouchPhase.Ended:
 
-                    break;
+                        float gestureTime = Time.time - fingerStartTime;
+                        float gestureDist = (touch.position - fingerStartPos).magnitude;
 
-
-
-                case TouchPhase.Ended:
-
-                    float swipeDistVertical = (new Vector3(0, touch.position.y, 0) - new Vector3(0, startPos.y, 0)).magnitude;
-
-                    if (swipeDistVertical > minSwipeDistY)
-                    {
-
-                        float swipeValue = Mathf.Sign(touch.position.y - startPos.y);
-
-                        if (swipeValue > 0)//up swipe
+                        if (isSwipe && gestureTime < maxSwipeTime && gestureDist > minSwipeDist)
                         {
-                            Forward();
-                        }
-                        else if (swipeValue < 0)//down swipe
-                        {
+                            Vector2 direction = touch.position - fingerStartPos;
+                            Vector2 swipeType = Vector2.zero;
+
+                            if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+                            {
+                                // the swipe is horizontal:
+                                swipeType = Vector2.right * Mathf.Sign(direction.x);
+                            }
+                            else
+                            {
+                                // the swipe is vertical:
+                                swipeType = Vector2.up * Mathf.Sign(direction.y);
+                            }
+
+                            if (swipeType.x != 0.0f)
+                            {
+                                if (swipeType.x > 0.0f)
+                                {
+                                    // MOVE RIGHT
+                                    Right();
+                                }
+                                else
+                                {
+                                    // MOVE LEFT
+                                    Left();
+                                }
+                            }
+
+                            if (swipeType.y != 0.0f)
+                            {
+                                if (swipeType.y > 0.0f)
+                                {
+                                    // MOVE UP
+                                    Forward();
+                                }
+                                else
+                                {
+                                    // MOVE DOWN
+                                }
+                            }
 
                         }
 
-                    }
-
-                    float swipeDistHorizontal = (new Vector3(touch.position.x, 0, 0) - new Vector3(startPos.x, 0, 0)).magnitude;
-
-                    if (swipeDistHorizontal > minSwipeDistX)
-                    {
-
-                        float swipeValue = Mathf.Sign(touch.position.x - startPos.x);
-
-                        if (swipeValue > 0)//right swipe
-                        {
-                            Right();
-                        }
-                        else if (swipeValue < 0)//left swipe
-                        {
-                            Left();
-                        }
-                    }
-                    break;
+                        break;
+                }
             }
         }
 
