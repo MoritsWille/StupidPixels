@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.IO;
 using System;
@@ -8,6 +9,7 @@ public class MenuControl : MonoBehaviour {
     public int Score;
     public int HighScore;
     string ScorePath;
+    string CPPath;
     string HighScorePath;
 
     // Use this for initialization
@@ -16,11 +18,13 @@ public class MenuControl : MonoBehaviour {
         {
             ScorePath = Application.persistentDataPath + @"Score.txt";
             HighScorePath = Application.persistentDataPath + @"HighScore.txt";
+            CPPath = Application.persistentDataPath + @"CurrentPlayer.txt";
         }
         else
         {
             ScorePath = Directory.GetCurrentDirectory() + @"\Score.txt";
             HighScorePath = Directory.GetCurrentDirectory() + @"\HighScore.txt";
+            CPPath = Directory.GetCurrentDirectory() + @"CurrentPlayer.txt";
         }
 
         if (!File.Exists(ScorePath))
@@ -32,6 +36,12 @@ public class MenuControl : MonoBehaviour {
         {
             File.Create(HighScorePath);
             File.WriteAllText(HighScorePath, "0");
+        }
+
+        if (!File.Exists(CPPath))
+        {
+            File.Create(CPPath);
+            File.WriteAllText(HighScorePath, "a");
         }
         //if (!File.Exists(OrangeBoxPath)) File.Create(OrangeBoxPath);
         //if (!File.Exists(GreenBoxPath)) File.Create(GreenBoxPath);
@@ -53,9 +63,14 @@ public class MenuControl : MonoBehaviour {
         Application.Quit();
     }
 
+    public void ChangeCharacter()
+    {
+        SceneManager.LoadScene("PlayerMenu");
+    }
+
     public void StartGame()
     {
-        Application.LoadLevel("Game");
+        SceneManager.LoadScene("Game");
     }
 
     public void GotoMenu()

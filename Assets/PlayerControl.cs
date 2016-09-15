@@ -144,19 +144,6 @@ public class PlayerControl : MonoBehaviour {
                                 }
                             }
 
-                            if (swipeType.y != 0.0f)
-                            {
-                                if (swipeType.y > 0.0f)
-                                {
-                                    // MOVE UP
-                                    Forward();
-                                }
-                                else
-                                {
-                                    // MOVE DOWN
-                                }
-                            }
-
                         }
 
                         break;
@@ -181,6 +168,11 @@ public class PlayerControl : MonoBehaviour {
     void DeadText ()
     {
 
+    }
+
+    void OnMouseDown()
+    {
+        Forward();
     }
 
     public void Forward()
