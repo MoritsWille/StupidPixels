@@ -41,7 +41,7 @@ public class MenuControl : MonoBehaviour {
         if (!File.Exists(CPPath))
         {
             File.Create(CPPath);
-            File.WriteAllText(HighScorePath, "a");
+            File.WriteAllText(CPPath, "a");
         }
         //if (!File.Exists(OrangeBoxPath)) File.Create(OrangeBoxPath);
         //if (!File.Exists(GreenBoxPath)) File.Create(GreenBoxPath);

@@ -36,11 +36,11 @@ public class LogControl : MonoBehaviour {
     void NewPos()
     {
         transform.position = new Vector3(transform.position.x, transform.position.y + Random.Range(50, 200), 0);
-        if (Log1.position.y < transform.position.y + 30 || Log1.position.y > transform.position.y - 30)
+        if (Log1.position.y < transform.position.y + 50 || Log1.position.y > transform.position.y - 50)
         {
-            if (Log2.position.y < transform.position.y + 30 || Log2.position.y > transform.position.y - 30)
+            if (Log2.position.y < transform.position.y + 50 || Log2.position.y > transform.position.y - 50)
             {
-                transform.position = new Vector3(transform.position.x, transform.position.y + 80,0);
+                transform.position = new Vector3(transform.position.x, transform.position.y + 80);
             }
         }
     }

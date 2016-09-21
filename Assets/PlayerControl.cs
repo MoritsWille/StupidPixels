@@ -9,37 +9,61 @@ public class PlayerControl : MonoBehaviour {
     float HighestSPT = 0;
     float BeforePos = 0;
     bool WalkRight = true;
-    public Sprite WalkLeftS;
-    public Sprite WalkRightS;
-    public Sprite Still;
+    Sprite WalkLeftS;
+    Sprite WalkRightS;
+    Sprite Still;
+    public Sprite aWalkLeftS;
+    public Sprite aWalkRightS;
+    public Sprite aStill;
+    public Sprite bWalkLeftS;
+    public Sprite bWalkRightS;
+    public Sprite bStill;
     bool Dead = false;
     Text ScoreText;
     public GameObject Text;
     string ScorePath;
     string HighScorePath;
-    private float fingerStartTime = 0.0f;
-    private Vector2 fingerStartPos = Vector2.zero;
-    private bool isSwipe = false;
-    private float minSwipeDist = 50.0f;
-    private float maxSwipeTime = 0.5f;
+    string CPPath;
+    Vector2 firstPressPos;
+    Vector2 secondPressPos;
+    Vector2 currentSwipe;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
+
         if (Application.platform == RuntimePlatform.Android)
         {
             ScorePath = Application.persistentDataPath + @"Score.txt";
             HighScorePath = Application.persistentDataPath + @"HighScore.txt";
+            CPPath = Application.persistentDataPath + @"CurrentPlayer.txt";
         }
         else
         {
             ScorePath = Directory.GetCurrentDirectory() + @"\Score.txt";
             HighScorePath = Directory.GetCurrentDirectory() + @"\HighScore.txt";
+            CPPath = Directory.GetCurrentDirectory() + @"CurrentPlayer.txt";
         }
+
+        switch (File.ReadAllText(CPPath))
+        {
+            case "a":
+                WalkLeftS = aWalkLeftS;
+                WalkRightS = aWalkRightS;
+                Still = aStill;
+                break;
+            case "b":
+                WalkLeftS = bWalkLeftS;
+                WalkRightS = bWalkRightS;
+                Still = bStill;
+                break;
+        }
+        gameObject.GetComponent<SpriteRenderer>().sprite = Still;
         ScoreText = Text.GetComponent<Text>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        Swipe();
         ScoreText.text = "Score: " + Convert.ToInt16(Math.Round(transform.position.y)).ToString();
         if (Dead == false)
         {
@@ -88,69 +112,6 @@ public class PlayerControl : MonoBehaviour {
                 HighestSPT = SpeedperTick;
             }
         }
-
-
-        if (Input.touchCount > 0)
-        {
-
-            foreach (Touch touch in Input.touches)
-            {
-                switch (touch.phase)
-                {
-                    case TouchPhase.Began:
-                        /* this is a new touch */
-                        isSwipe = true;
-                        fingerStartTime = Time.time;
-                        fingerStartPos = touch.position;
-                        break;
-
-                    case TouchPhase.Canceled:
-                        /* The touch is being canceled */
-                        isSwipe = false;
-                        break;
-
-                    case TouchPhase.Ended:
-
-                        float gestureTime = Time.time - fingerStartTime;
-                        float gestureDist = (touch.position - fingerStartPos).magnitude;
-
-                        if (isSwipe && gestureTime < maxSwipeTime && gestureDist > minSwipeDist)
-                        {
-                            Vector2 direction = touch.position - fingerStartPos;
-                            Vector2 swipeType = Vector2.zero;
-
-                            if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
-                            {
-                                // the swipe is horizontal:
-                                swipeType = Vector2.right * Mathf.Sign(direction.x);
-                            }
-                            else
-                            {
-                                // the swipe is vertical:
-                                swipeType = Vector2.up * Mathf.Sign(direction.y);
-                            }
-
-                            if (swipeType.x != 0.0f)
-                            {
-                                if (swipeType.x > 0.0f)
-                                {
-                                    // MOVE RIGHT
-                                    Right();
-                                }
-                                else
-                                {
-                                    // MOVE LEFT
-                                    Left();
-                                }
-                            }
-
-                        }
-
-                        break;
-                }
-            }
-        }
-
 	}
 
     void OnCollisionEnter2D()
@@ -194,7 +155,14 @@ public class PlayerControl : MonoBehaviour {
     public void Left()
     {
         if (transform.position.x == 0 || transform.position.x == 12.5f)
-            transform.position = new Vector3(transform.position.x - 12.5f, transform.position.y, 0);
+        {
+            for (int I = 0; I < 5; I++)
+            {
+                transform.position = new Vector3(transform.position.x - 2.5f, transform.position.y, 0);
+                WaitForSeconds wait = new WaitForSeconds(0.5f);
+             
+            }
+        }
     }
 
     public void Right()
@@ -202,4 +170,39 @@ public class PlayerControl : MonoBehaviour {
         if (transform.position.x == 0 || transform.position.x == -12.5f)
             transform.position = new Vector3(transform.position.x + 12.5f, transform.position.y, 0);
     }
+
+    public void Swipe()
+{
+     if(Input.touches.Length > 0)
+     {
+         Touch t = Input.GetTouch(0);
+         if(t.phase == TouchPhase.Began)
+         {
+              //save began touch 2d point
+             firstPressPos = new Vector2(t.position.x,t.position.y);
+         }
+         if(t.phase == TouchPhase.Ended)
+         {
+              //save ended touch 2d point
+             secondPressPos = new Vector2(t.position.x,t.position.y);
+                           
+              //create vector from the two points
+             currentSwipe = new Vector3(secondPressPos.x - firstPressPos.x, secondPressPos.y - firstPressPos.y);
+               
+             //normalize the 2d vector
+             currentSwipe.Normalize();
+ 
+             //swipe left
+             if(currentSwipe.x < 0 && currentSwipe.y > -0.5f && currentSwipe.y < 0.5f)
+             {
+                    Left();
+             }
+             //swipe right
+             if(currentSwipe.x > 0 && currentSwipe.y > -0.5f && currentSwipe.y < 0.5f)
+             {
+                    Right();
+             }
+         }
+     }
+}
 }
