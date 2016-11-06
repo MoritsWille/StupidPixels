@@ -8,7 +8,6 @@ public class PlayerSelect : MonoBehaviour {
     public Transform Pa;
     public Transform Pb;
     float TP = 0;
-    int[] TS = {0,0};
     int CamPos = 0;
     public Transform Camera;
 
@@ -18,9 +17,16 @@ public class PlayerSelect : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        
+        if (Camera.position.x < TP)
+        {
+            Camera.position = new Vector3(Camera.position.x + 0.01f, 0, -10);
+        }
+        else if (Camera.position.x > TP)
+        {
+            Camera.position = new Vector3(Camera.position.x - 0.01f, 0, -10);
+        }
 
-	    if (Input.GetKeyDown("a"))
+        if (Input.GetKeyDown("a"))
         {
             Right();
         }
@@ -35,11 +41,11 @@ public class PlayerSelect : MonoBehaviour {
 
     public void Right()
     {
-        TP = +0.25F;
+        TP = Camera.position.x - 0.25f;
     }
 
     public void Left()
     {
-        TP = -025f;
+        TP = Camera.position.x + 025f;
     }
 }

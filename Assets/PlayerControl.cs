@@ -27,6 +27,9 @@ public class PlayerControl : MonoBehaviour {
     Vector2 firstPressPos;
     Vector2 secondPressPos;
     Vector2 currentSwipe;
+    float PosGoal = 0;
+    float XPool;
+    float YPool;
 
     // Use this for initialization
     void Start () {
@@ -73,8 +76,8 @@ public class PlayerControl : MonoBehaviour {
             }
             else SpeedperTick = 0;
 
-            transform.position = new Vector3(transform.position.x, transform.position.y + SpeedperTick, 0);
-
+            YPool = +SpeedperTick;
+            
             if (Input.GetKeyDown("w"))
             {
                 if (WalkRight == true)
@@ -88,19 +91,26 @@ public class PlayerControl : MonoBehaviour {
                     WalkRight = true;
                 }
 
-                transform.position = new Vector3(transform.position.x, transform.position.y + 1, 0);
+                YPool = +1;
             }
 
-            if (Input.GetKeyDown("a"))
+            if (Input.GetKeyDown("a") && transform.position.x == 12.5f || Input.GetKeyDown("a") &&  transform.position.x == 0f)
             {
-                if (transform.position.x == 0 || transform.position.x == 12.5f)
-                    transform.position = new Vector3(transform.position.x - 12.5f, transform.position.y, 0);
+                PosGoal = -12.5f;
             }
 
-            if (Input.GetKeyDown("d"))
+            if (Input.GetKeyDown("d") && transform.position.x == -12.5f || Input.GetKeyDown("d") &&  transform.position.x == 0f)
             {
-                if (transform.position.x == 0 || transform.position.x == -12.5f)
-                    transform.position = new Vector3(transform.position.x + 12.5f, transform.position.y, 0);
+                PosGoal = +12.5f;
+            }
+
+            if (transform.position.x < PosGoal)
+            {
+                XPool = +0.5f;
+            }
+            else if (PosGoal < transform.position.x)
+            {
+                XPool = -0.5f;
             }
 
             SpeedperTick = transform.position.y - BeforePos;
@@ -111,6 +121,7 @@ public class PlayerControl : MonoBehaviour {
             {
                 HighestSPT = SpeedperTick;
             }
+            transform.position = new Vector3(transform.position.x + XPool, transform.position.y + YPool,0);
         }
 	}
 
