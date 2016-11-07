@@ -7,10 +7,10 @@ using System.IO;
 public class PlayerSelect : MonoBehaviour {
     public Transform Pa;
     public Transform Pb;
-    float TP = 0;
-    int[] TS = {0,0};
-    int CamPos = 0;
-    public Transform Camera;
+    bool TwasTouch = false;
+    public Transform CameraPos;
+    Vector2 TouchStart;
+    Vector2 TouchDelta;
 
     // Use this for initialization
     void Start () {
@@ -18,28 +18,20 @@ public class PlayerSelect : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        
-
-	    if (Input.GetKeyDown("a"))
+        if(Input.touchCount == 1)
         {
-            Right();
+            Touch touch = Input.GetTouch(0);
+            Vector2 WorldTouch = Camera.main.ScreenToWorldPoint(touch.position);
+            if (!TwasTouch)
+            {
+                TouchStart = WorldTouch;
+                TwasTouch = true;
+            }
+            CameraPos.position = new Vector3(CameraPos.position.x - (WorldTouch.x - TouchStart.x), 0, -10);
         }
-
-        if (Input.GetKeyDown("d"))
+        else
         {
-            Left();
+            TwasTouch = false;
         }
-
-
-    }
-
-    public void Right()
-    {
-        TP = +0.25F;
-    }
-
-    public void Left()
-    {
-        TP = -025f;
     }
 }

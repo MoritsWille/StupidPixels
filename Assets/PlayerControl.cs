@@ -5,9 +5,11 @@ using System;
 using System.IO;
 
 public class PlayerControl : MonoBehaviour {
+    // stats
     float SpeedperTick = 0;
     float HighestSPT = 0;
     float BeforePos = 0;
+    //Sprites
     bool WalkRight = true;
     Sprite WalkLeftS;
     Sprite WalkRightS;
@@ -18,15 +20,22 @@ public class PlayerControl : MonoBehaviour {
     public Sprite bWalkLeftS;
     public Sprite bWalkRightS;
     public Sprite bStill;
+    public Sprite cWalkLeftS;
+    public Sprite cWalkRightS;
+    public Sprite cStill;
+    //game functions
+    float xPool = 0;
     bool Dead = false;
     Text ScoreText;
     public GameObject Text;
+    //files
     string ScorePath;
     string HighScorePath;
     string CPPath;
-    Vector2 firstPressPos;
-    Vector2 secondPressPos;
-    Vector2 currentSwipe;
+    //touch
+    bool TwasTouch = false;
+    Vector2 TouchStart;
+    Vector2 TouchDelta;
 
     // Use this for initialization
     void Start () {
@@ -56,6 +65,11 @@ public class PlayerControl : MonoBehaviour {
                 WalkRightS = bWalkRightS;
                 Still = bStill;
                 break;
+            case "c":
+                WalkLeftS = cWalkLeftS;
+                WalkRightS = cWalkRightS;
+                Still = bStill;
+                break;
         }
         gameObject.GetComponent<SpriteRenderer>().sprite = Still;
         ScoreText = Text.GetComponent<Text>();
@@ -63,48 +77,22 @@ public class PlayerControl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Swipe();
         ScoreText.text = "Score: " + Convert.ToInt16(Math.Round(transform.position.y)).ToString();
-        if (Dead == false)
+        if (!Dead)
         {
-            if (SpeedperTick > 0.001f)
+            if (Input.touchCount == 1)
             {
-                SpeedperTick = SpeedperTick - 0.0050f;
-            }
-            else SpeedperTick = 0;
-
-            transform.position = new Vector3(transform.position.x, transform.position.y + SpeedperTick, 0);
-
-            if (Input.GetKeyDown("w"))
-            {
-                if (WalkRight == true)
+                Touch touch = Input.GetTouch(0);
+                Vector2 WorldTouch = Camera.main.ScreenToWorldPoint(touch.position);
+                if (!TwasTouch)
                 {
-                    gameObject.GetComponent<SpriteRenderer>().sprite = WalkLeftS;
-                    WalkRight = false;
+                    TouchStart = WorldTouch;
+                    TwasTouch = true;
                 }
-                else
-                {
-                    gameObject.GetComponent<SpriteRenderer>().sprite = WalkRightS;
-                    WalkRight = true;
-                }
-
-                transform.position = new Vector3(transform.position.x, transform.position.y + 1, 0);
+                xPool = transform.position.x + (WorldTouch.x - TouchStart.x);
             }
-
-            if (Input.GetKeyDown("a"))
-            {
-                if (transform.position.x == 0 || transform.position.x == 12.5f)
-                    transform.position = new Vector3(transform.position.x - 12.5f, transform.position.y, 0);
-            }
-
-            if (Input.GetKeyDown("d"))
-            {
-                if (transform.position.x == 0 || transform.position.x == -12.5f)
-                    transform.position = new Vector3(transform.position.x + 12.5f, transform.position.y, 0);
-            }
-
             SpeedperTick = transform.position.y - BeforePos;
-
+            transform.position = new Vector3(xPool, transform.position.y + SpeedperTick, 0);
             BeforePos = transform.position.y;
 
             if (SpeedperTick > HighestSPT)
@@ -125,84 +113,4 @@ public class PlayerControl : MonoBehaviour {
             File.WriteAllText(HighScorePath, File.ReadAllText(ScorePath));
         }
     }
-
-    void DeadText ()
-    {
-
-    }
-
-    void OnMouseDown()
-    {
-        Forward();
-    }
-
-    public void Forward()
-    {
-        if (WalkRight == true)
-        {
-            gameObject.GetComponent<SpriteRenderer>().sprite = WalkLeftS;
-            WalkRight = false;
-        }
-        else
-        {
-            gameObject.GetComponent<SpriteRenderer>().sprite = WalkRightS;
-            WalkRight = true;
-        }
-
-        transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, 0);
-    }
-
-    public void Left()
-    {
-        if (transform.position.x == 0 || transform.position.x == 12.5f)
-        {
-            for (int I = 0; I < 5; I++)
-            {
-                transform.position = new Vector3(transform.position.x - 2.5f, transform.position.y, 0);
-                WaitForSeconds wait = new WaitForSeconds(0.5f);
-             
-            }
-        }
-    }
-
-    public void Right()
-    {
-        if (transform.position.x == 0 || transform.position.x == -12.5f)
-            transform.position = new Vector3(transform.position.x + 12.5f, transform.position.y, 0);
-    }
-
-    public void Swipe()
-{
-     if(Input.touches.Length > 0)
-     {
-         Touch t = Input.GetTouch(0);
-         if(t.phase == TouchPhase.Began)
-         {
-              //save began touch 2d point
-             firstPressPos = new Vector2(t.position.x,t.position.y);
-         }
-         if(t.phase == TouchPhase.Ended)
-         {
-              //save ended touch 2d point
-             secondPressPos = new Vector2(t.position.x,t.position.y);
-                           
-              //create vector from the two points
-             currentSwipe = new Vector3(secondPressPos.x - firstPressPos.x, secondPressPos.y - firstPressPos.y);
-               
-             //normalize the 2d vector
-             currentSwipe.Normalize();
- 
-             //swipe left
-             if(currentSwipe.x < 0 && currentSwipe.y > -0.5f && currentSwipe.y < 0.5f)
-             {
-                    Left();
-             }
-             //swipe right
-             if(currentSwipe.x > 0 && currentSwipe.y > -0.5f && currentSwipe.y < 0.5f)
-             {
-                    Right();
-             }
-         }
-     }
-}
 }
