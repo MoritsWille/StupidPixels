@@ -50,7 +50,7 @@ public class PlayerControl : MonoBehaviour {
         {
             ScorePath = Directory.GetCurrentDirectory() + @"\Score.txt";
             HighScorePath = Directory.GetCurrentDirectory() + @"\HighScore.txt";
-            CPPath = Directory.GetCurrentDirectory() + @"CurrentPlayer.txt";
+            CPPath = Directory.GetCurrentDirectory() + @"\CurrentPlayer.txt";
         }
 
         switch (File.ReadAllText(CPPath))
@@ -77,7 +77,7 @@ public class PlayerControl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        ScoreText.text = "Score: " + Convert.ToInt16(Math.Round(transform.position.y)).ToString();
+        //ScoreText.text = Convert.ToString(Convert.ToInt32(transform.position.y));
         if (!Dead)
         {
             if (Input.touchCount == 1)
@@ -91,7 +91,7 @@ public class PlayerControl : MonoBehaviour {
                 }
                 xPool = transform.position.x + (WorldTouch.x - TouchStart.x);
             }
-            SpeedperTick = transform.position.y - BeforePos;
+            SpeedperTick = (transform.position.y - BeforePos) + 1f;
             transform.position = new Vector3(xPool, transform.position.y + SpeedperTick, 0);
             BeforePos = transform.position.y;
 
