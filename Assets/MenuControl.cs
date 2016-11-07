@@ -16,15 +16,15 @@ public class MenuControl : MonoBehaviour {
     void Start() {
         if (Application.platform == RuntimePlatform.Android)
         {
-            ScorePath = Application.persistentDataPath + @"Score.txt";
-            HighScorePath = Application.persistentDataPath + @"HighScore.txt";
-            CPPath = Application.persistentDataPath + @"CurrentPlayer.txt";
+            ScorePath = Application.persistentDataPath + @"/Score.txt";
+            HighScorePath = Application.persistentDataPath + @"/HighScore.txt";
+            CPPath = Application.persistentDataPath + @"/CurrentPlayer.txt";
         }
         else
         {
             ScorePath = Directory.GetCurrentDirectory() + @"\Score.txt";
             HighScorePath = Directory.GetCurrentDirectory() + @"\HighScore.txt";
-            CPPath = Directory.GetCurrentDirectory() + @"CurrentPlayer.txt";
+            CPPath = Directory.GetCurrentDirectory() + @"\CurrentPlayer.txt";
         }
 
         if (!File.Exists(ScorePath))
@@ -36,12 +36,6 @@ public class MenuControl : MonoBehaviour {
         {
             File.Create(HighScorePath);
             File.WriteAllText(HighScorePath, "0");
-        }
-
-        if (!File.Exists(CPPath))
-        {
-            File.Create(CPPath);
-            File.WriteAllText(CPPath, "a");
         }
         //if (!File.Exists(OrangeBoxPath)) File.Create(OrangeBoxPath);
         //if (!File.Exists(GreenBoxPath)) File.Create(GreenBoxPath);

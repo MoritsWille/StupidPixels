@@ -33,18 +33,16 @@ public class PlayerControl : MonoBehaviour {
     string HighScorePath;
     string CPPath;
     //touch
-    bool TwasTouch = false;
-    Vector2 TouchStart;
-    Vector2 TouchDelta;
+    Vector2 WorldTouch;
 
     // Use this for initialization
     void Start () {
 
         if (Application.platform == RuntimePlatform.Android)
         {
-            ScorePath = Application.persistentDataPath + @"Score.txt";
-            HighScorePath = Application.persistentDataPath + @"HighScore.txt";
-            CPPath = Application.persistentDataPath + @"CurrentPlayer.txt";
+            ScorePath = Application.persistentDataPath + @"/Score.txt";
+            HighScorePath = Application.persistentDataPath + @"/HighScore.txt";
+            CPPath = Application.persistentDataPath + @"/CurrentPlayer.txt";
         }
         else
         {
@@ -77,19 +75,14 @@ public class PlayerControl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        //ScoreText.text = Convert.ToString(Convert.ToInt32(transform.position.y));
+        ScoreText.text = Convert.ToString(Convert.ToInt32(transform.position.y - 1));
         if (!Dead)
         {
             if (Input.touchCount == 1)
             {
                 Touch touch = Input.GetTouch(0);
-                Vector2 WorldTouch = Camera.main.ScreenToWorldPoint(touch.position);
-                if (!TwasTouch)
-                {
-                    TouchStart = WorldTouch;
-                    TwasTouch = true;
-                }
-                xPool = transform.position.x + (WorldTouch.x - TouchStart.x);
+                WorldTouch = Camera.main.ScreenToWorldPoint(touch.position);
+                xPool = WorldTouch.x;
             }
             SpeedperTick = (transform.position.y - BeforePos) + 1f;
             transform.position = new Vector3(xPool, transform.position.y + SpeedperTick, 0);

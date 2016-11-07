@@ -11,7 +11,6 @@ public class PlayerSelect : MonoBehaviour {
     bool TwasTouch = false;
     public Transform CameraPos;
     Vector2 TouchStart;
-    Vector2 TouchDelta;
 
     // Use this for initialization
     void Start () {

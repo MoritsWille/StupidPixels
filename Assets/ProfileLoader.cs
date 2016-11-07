@@ -3,23 +3,27 @@ using System.Collections;
 using System.IO;
 
 public class ProfileLoader : MonoBehaviour {
-    
-    string ScorePath;
     string CPPath;
-    string HighScorePath;
     public Sprite Adam;
     public Sprite Benson;
+    public Sprite Carl;
 
     // Use this for initialization
     void Start()
     {
         if (Application.platform == RuntimePlatform.Android)
         {
-            CPPath = Application.persistentDataPath + @"CurrentPlayer.txt";
+            CPPath = Application.persistentDataPath + @"/CurrentPlayer.txt";
         }
         else
         {
-            CPPath = Directory.GetCurrentDirectory() + @"CurrentPlayer.txt";
+            CPPath = Directory.GetCurrentDirectory() + @"\CurrentPlayer.txt";
+        }
+
+        if (!File.Exists(CPPath))
+        {
+            File.Create(CPPath);
+            File.WriteAllText(CPPath, "a");
         }
 
         switch (File.ReadAllText(CPPath))
@@ -30,8 +34,10 @@ public class ProfileLoader : MonoBehaviour {
             case "b":
                 gameObject.GetComponent<SpriteRenderer>().sprite = Benson;
                 break;
+            case "c":
+                gameObject.GetComponent<SpriteRenderer>().sprite = Carl;
+                break;
         }
-
     }
 	
 	// Update is called once per frame
