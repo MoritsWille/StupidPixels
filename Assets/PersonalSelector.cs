@@ -5,6 +5,7 @@ using System.IO;
 public class PersonalSelector : MonoBehaviour
 {
     public Transform Camera;
+    public string ID;
 
     // Use this for initialization
     void Start()

@@ -24,7 +24,6 @@ public class PlayerControl : MonoBehaviour {
     public Sprite cWalkRightS;
     public Sprite cStill;
     //game functions
-    float xPool = 0;
     bool Dead = false;
     Text ScoreText;
     public GameObject Text;
@@ -33,7 +32,7 @@ public class PlayerControl : MonoBehaviour {
     string HighScorePath;
     string CPPath;
     //touch
-    Vector2 WorldTouch;
+    Vector2 WorldTouch = new Vector2(0,0);
 
     // Use this for initialization
     void Start () {
@@ -51,8 +50,19 @@ public class PlayerControl : MonoBehaviour {
             CPPath = Directory.GetCurrentDirectory() + @"\CurrentPlayer.txt";
         }
 
+        if(File.ReadAllText(HighScorePath) == "")
+        {
+            File.WriteAllText(HighScorePath, "0");
+        }
+
         switch (File.ReadAllText(CPPath))
         {
+            case "":
+                File.WriteAllText(CPPath, "a");
+                WalkLeftS = aWalkLeftS;
+                WalkRightS = aWalkRightS;
+                Still = aStill;
+                break;
             case "a":
                 WalkLeftS = aWalkLeftS;
                 WalkRightS = aWalkRightS;
@@ -78,28 +88,23 @@ public class PlayerControl : MonoBehaviour {
         ScoreText.text = Convert.ToString(Convert.ToInt32(transform.position.y - 1));
         if (!Dead)
         {
+            SpeedperTick = (transform.position.y - BeforePos) + 1f;
+
             if (Input.touchCount == 1)
             {
                 Touch touch = Input.GetTouch(0);
                 WorldTouch = Camera.main.ScreenToWorldPoint(touch.position);
-                xPool = WorldTouch.x;
             }
-            SpeedperTick = (transform.position.y - BeforePos) + 1f;
-            transform.position = new Vector3(xPool, transform.position.y + SpeedperTick, 0);
-            BeforePos = transform.position.y;
+            transform.position = new Vector3(WorldTouch.x, transform.position.y + SpeedperTick, 0);
 
-            if (SpeedperTick > HighestSPT)
-            {
-                HighestSPT = SpeedperTick;
-            }
+            BeforePos = transform.position.y;
         }
 	}
 
     void OnCollisionEnter2D()
     {
-        SpeedperTick = 0;
-        gameObject.GetComponent<SpriteRenderer>().sprite = null;
         Dead = true;
+        gameObject.GetComponent<SpriteRenderer>().sprite = null;
         File.WriteAllText(ScorePath, Convert.ToInt32(Math.Round(transform.position.y)).ToString());
         if (Convert.ToInt32(File.ReadAllText(HighScorePath)) < Convert.ToInt32(File.ReadAllText(ScorePath)) || new FileInfo(HighScorePath).Length == 0)
         {
