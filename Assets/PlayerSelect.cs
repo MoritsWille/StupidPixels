@@ -37,7 +37,7 @@ public class PlayerSelect : MonoBehaviour {
                 TouchStart = WorldTouch;
                 TwasTouch = true;
             }
-            if (CameraPos.position.x < Pc.position.x + 0.25f && CameraPos.position.x > Pa.position.x - 0.25f)
+            if (CameraPos.position.x - (WorldTouch.x - TouchStart.x) < 0.25f && CameraPos.position.x - (WorldTouch.x - TouchStart.x) > -0.25f)
             {
                 CameraPos.position = new Vector3(CameraPos.position.x - (WorldTouch.x - TouchStart.x), 0, -10);
             }
@@ -50,11 +50,11 @@ public class PlayerSelect : MonoBehaviour {
 
     public void SelectPlayer()
     {
-        if (CameraPos.position.x  < -0.0125f )
+        if (CameraPos.position.x  < -0.125f )
         {
             File.WriteAllText(CPPath, "a");
         }
-        else if (CameraPos.position.x > 0.0125f)
+        else if (CameraPos.position.x > 0.125f)
         {
             File.WriteAllText(CPPath, "c");
         }

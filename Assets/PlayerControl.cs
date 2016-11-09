@@ -7,7 +7,6 @@ using System.IO;
 public class PlayerControl : MonoBehaviour {
     // stats
     float SpeedperTick = 0;
-    float HighestSPT = 0;
     float BeforePos = 0;
     //Sprites
     bool WalkRight = true;
@@ -24,6 +23,7 @@ public class PlayerControl : MonoBehaviour {
     public Sprite cWalkRightS;
     public Sprite cStill;
     //game functions
+    int I = 0;
     bool Dead = false;
     Text ScoreText;
     public GameObject Text;
@@ -76,12 +76,13 @@ public class PlayerControl : MonoBehaviour {
             case "c":
                 WalkLeftS = cWalkLeftS;
                 WalkRightS = cWalkRightS;
-                Still = bStill;
+                Still = cStill;
                 break;
         }
         gameObject.GetComponent<SpriteRenderer>().sprite = Still;
         ScoreText = Text.GetComponent<Text>();
-	}
+        gameObject.GetComponent<SpriteRenderer>().sprite = WalkRightS;
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -96,8 +97,27 @@ public class PlayerControl : MonoBehaviour {
                 WorldTouch = Camera.main.ScreenToWorldPoint(touch.position);
             }
             transform.position = new Vector3(WorldTouch.x, transform.position.y + SpeedperTick, 0);
-
             BeforePos = transform.position.y;
+
+            if (I == 100)
+            {
+                if (WalkRight)
+                {
+                    WalkRight = false;
+                    gameObject.GetComponent<SpriteRenderer>().sprite = WalkLeftS;
+                }
+                else
+                {
+                    WalkRight = true;
+                    gameObject.GetComponent<SpriteRenderer>().sprite = WalkRightS;
+                }
+                I = 0;
+            }
+            else
+            {
+                I++;
+            }
+
         }
 	}
 
