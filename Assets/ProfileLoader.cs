@@ -7,6 +7,7 @@ public class ProfileLoader : MonoBehaviour {
     public Sprite Adam;
     public Sprite Benson;
     public Sprite Carl;
+    public Sprite Donald;
 
     // Use this for initialization
     void Start()
@@ -36,6 +37,9 @@ public class ProfileLoader : MonoBehaviour {
                 break;
             case "c":
                 gameObject.GetComponent<SpriteRenderer>().sprite = Carl;
+                break;
+            case "d":
+                gameObject.GetComponent<SpriteRenderer>().sprite = Donald;
                 break;
         }
     }

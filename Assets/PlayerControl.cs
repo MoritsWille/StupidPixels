@@ -22,6 +22,9 @@ public class PlayerControl : MonoBehaviour {
     public Sprite cWalkLeftS;
     public Sprite cWalkRightS;
     public Sprite cStill;
+    public Sprite dWalkLeftS;
+    public Sprite dWalkRightS;
+    public Sprite dStill;
     //game functions
     int I = 0;
     bool Dead = false;
@@ -77,6 +80,11 @@ public class PlayerControl : MonoBehaviour {
                 WalkLeftS = cWalkLeftS;
                 WalkRightS = cWalkRightS;
                 Still = cStill;
+                break;
+            case "d":
+                WalkLeftS = dWalkLeftS;
+                WalkRightS = dWalkRightS;
+                Still = dStill;
                 break;
         }
         gameObject.GetComponent<SpriteRenderer>().sprite = Still;
