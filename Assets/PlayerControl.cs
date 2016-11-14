@@ -5,9 +5,6 @@ using System;
 using System.IO;
 
 public class PlayerControl : MonoBehaviour {
-    // stats
-    float SpeedperTick = 0;
-    float BeforePos = 0;
     //Sprites
     bool WalkRight = true;
     Sprite WalkLeftS;
@@ -97,15 +94,22 @@ public class PlayerControl : MonoBehaviour {
         ScoreText.text = Convert.ToString(Convert.ToInt32(transform.position.y - 1));
         if (!Dead)
         {
-            SpeedperTick = (transform.position.y - BeforePos) + 1f;
 
             if (Input.touchCount == 1)
             {
                 Touch touch = Input.GetTouch(0);
                 WorldTouch = Camera.main.ScreenToWorldPoint(touch.position);
             }
-            transform.position = new Vector3(WorldTouch.x, transform.position.y + SpeedperTick, 0);
-            BeforePos = transform.position.y;
+
+            if (WorldTouch.x < 21 && WorldTouch.x > -21)
+            {
+                transform.position = new Vector3(WorldTouch.x, WorldTouch.y, 0);
+            }
+            else
+            {
+                transform.position = new Vector3(transform.position.x, WorldTouch.y, 0);
+            }
+            
 
             if (I == 100)
             {

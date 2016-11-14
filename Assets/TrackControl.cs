@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class TrackControl : MonoBehaviour {
-    public Transform Player;
+    public Transform Camera;
     public Transform Track1;
     public Transform Track2;
     bool T1 = true;
@@ -15,7 +15,7 @@ public class TrackControl : MonoBehaviour {
 	void Update () {
 	   if (T1)
        {
-            if (Player.position.y > Track2.position.y - 30)
+            if (Camera.position.y > Track2.position.y - 1)
             {
                 Track1.position = new Vector3(0, Track2.position.y + 99, 0);
                 T1 = false;
@@ -23,7 +23,7 @@ public class TrackControl : MonoBehaviour {
        }
        else
        {
-           if (Player.position.y > Track1.position.y - 30)
+           if (Camera.position.y > Track1.position.y - 1)
            {
                Track2.position = new Vector3(0, Track1.position.y + 99, 0);
                T1 = true;
