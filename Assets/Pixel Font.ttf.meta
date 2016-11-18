@@ -3,16 +3,18 @@ guid: 589986b8ed4313748aea2caa36470e95
 timeCreated: 1453364970
 licenseType: Free
 TrueTypeFontImporter:
-  serializedVersion: 2
-  fontSize: 16
+  serializedVersion: 4
+  fontSize: 12
   forceTextureCase: -2
-  characterSpacing: 1
-  characterPadding: 0
+  characterSpacing: 0
+  characterPadding: 1
   includeFontData: 1
-  use2xBehaviour: 0
-  fontNames: []
+  fontNames:
+  - Minecraft
+  fallbackFontReferences: []
   customCharacters: 
-  fontRenderingMode: 2
+  fontRenderingMode: 3
+  ascentCalculationMode: 1
   userData: 
   assetBundleName: 
   assetBundleVariant: 
