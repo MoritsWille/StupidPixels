@@ -69,7 +69,7 @@ public class MenuControl : MonoBehaviour {
 
     public void GotoMenu()
     {
-        Application.LoadLevel("Menu");
+        SceneManager.LoadScene("Menu");
     }
 
     public void ShowAchievements()
