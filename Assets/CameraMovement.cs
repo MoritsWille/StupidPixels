@@ -5,7 +5,7 @@ public class CameraMovement : MonoBehaviour {
     public Transform Player;
     // stats
     float SpeedperTick = 0;
-    float BeforePos = 0;
+    float BeforePos = 39.5f;
 
     // Use this for initialization
     void Start () {

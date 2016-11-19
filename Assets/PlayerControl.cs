@@ -91,7 +91,7 @@ public class PlayerControl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        ScoreText.text = Convert.ToString(Convert.ToInt32(transform.position.y - 1));
+        ScoreText.text = Convert.ToString(Math.Round(transform.position.y));
         if (!Dead)
         {
 
