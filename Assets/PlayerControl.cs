@@ -33,6 +33,7 @@ public class PlayerControl : MonoBehaviour {
     string CPPath;
     //touch
     Vector2 WorldTouch = new Vector2(0,0);
+    bool touchReady;
 
     // Use this for initialization
     void Start () {
@@ -95,10 +96,15 @@ public class PlayerControl : MonoBehaviour {
         if (!Dead)
         {
 
-            if (Input.touchCount == 1)
+            if (Input.touchCount == 1 && touchReady)
             {
                 Touch touch = Input.GetTouch(0);
                 WorldTouch = Camera.main.ScreenToWorldPoint(touch.position);
+
+                if (touch.phase == TouchPhase.Ended)
+                {
+                    touchReady = false;
+                }
             }
 
             if (WorldTouch.x < 21 && WorldTouch.x > -21)
@@ -142,5 +148,10 @@ public class PlayerControl : MonoBehaviour {
         {
             File.WriteAllText(HighScorePath, File.ReadAllText(ScorePath));
         }
+    }
+    
+    void OnMouseDown()
+    {
+        touchReady = true;
     }
 }

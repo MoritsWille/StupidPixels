@@ -61,12 +61,13 @@ public class CountDown : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        time += Time.deltaTime;
-
-        if (time > 1)
+        if (countDown)
         {
-            if (countDown)
-            {
+            time += Time.deltaTime;
+        }
+
+        if (time > 0.75f)
+        {
                 timeLeft--;
                 if (timeLeft == -1)
                 {
@@ -78,7 +79,6 @@ public class CountDown : MonoBehaviour {
                 }
 
                 time = 0;
-            }
         }
 	}
 
@@ -90,5 +90,10 @@ public class CountDown : MonoBehaviour {
     void OnMouseDown()
     {
         countDown = true;
+    }
+
+    void OnMouseUp()
+    {
+        countDown = false;
     }
 }
